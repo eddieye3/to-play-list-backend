@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    /* ---------- Output ---------- */
+    "outDir": "./dist",                 // Where compiled JS goes
+    "rootDir": "./src",                 // Where your TS source files live
+    "sourceMap": true,                  // Generate .map files for debugging
+    "removeComments": true,             // Strip comments in build output
+    "declaration": true,                // Generate .d.ts files for reusability
+    "declarationMap": true,             // Maps .d.ts back to .ts source
+    "noEmitOnError": true,              // Don’t emit if there are type errors
+
+    /* ---------- Language Target ---------- */
+    "target": "ES2022",                 // Modern JS output (Node 18+ supports it)
+    "lib": ["ES2022"],                  // Use ES2022 APIs in type checking
+
+    /* ---------- Module Resolution ---------- */
+    "module": "NodeNext",               // Best for Node.js + ESM support
+    "moduleResolution": "NodeNext",     // Use Node’s ESM/CJS resolution rules
+    "resolveJsonModule": true,          // Allow `import x from "./file.json"`
+    "esModuleInterop": true,            // CommonJS ↔ ESM interop
+    "allowSyntheticDefaultImports": true, // Enables `import express from "express"`
+
+    /* ---------- Strictness ---------- */
+    "strict": true,                     // Enables all strict type checks
+    "noImplicitAny": true,              // Prevents `any` unless explicit
+    "strictNullChecks": true,           // Null/undefined must be handled
+    "strictBindCallApply": true,        // Strict function call rules
+    "noImplicitThis": true,             // Disallow `this` of type `any`
+    "alwaysStrict": true,               // Enforces `use strict` in JS output
+
+    /* ---------- Type Safety ---------- */
+    "noUnusedLocals": true,             // Error on unused local variables
+    "noUnusedParameters": true,         // Error on unused function params
+    "noFallthroughCasesInSwitch": true, // Prevent accidental case fallthrough
+    "noUncheckedIndexedAccess": true,   // Safer array/object indexing
+    "exactOptionalPropertyTypes": true, // Makes optional props behave strictly
+
+    /* ---------- Performance & Checks ---------- */
+    "forceConsistentCasingInFileNames": true, // Enforce case-sensitive imports
+    "skipLibCheck": false,             // Type check all .d.ts files
+    "pretty": true                      // Prettier error formatting in terminal
+  },
+
+  /* ---------- File Includes/Excludes ---------- */
+  "include": ["src"],                   // Compile everything in /src
+  "exclude": ["node_modules", "dist", "**/*.test.ts"] // Skip build output + tests
+}
