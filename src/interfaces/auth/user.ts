@@ -1,4 +1,4 @@
-export interface SafeUserDTO {
+export interface ISafeUserDTO {
   id: string;
   email: string;
 }

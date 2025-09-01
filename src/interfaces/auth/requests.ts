@@ -1,9 +1,9 @@
-export interface LoginRequest {
+export interface ILoginRequest {
   email: string;
   password: string;
 }
 
-export interface RegisterRequest {
+export interface IRegisterRequest {
   email: string;
   password: string;
 }

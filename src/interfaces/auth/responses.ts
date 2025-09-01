@@ -1,13 +1,13 @@
-export interface RegisteredUserResponse {
+export interface IRegisteredUserResponse {
   isRegistered: boolean;
 }
 
-export interface LoginResponse {
+export interface ILoginResponse {
   token: string;
   message?: string;
 }
 
-export interface RegisterResponse {
+export interface IRegisterResponse {
   token: string;
   message?: string;
 }

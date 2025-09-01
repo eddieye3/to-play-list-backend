@@ -3,16 +3,16 @@ import { Request, Response, NextFunction } from "express";
 import { AppError } from "../middleware/errorHandler.js";
 import { findUserByEmail } from "../services/authService.js";
 import {
-  RegisteredUserResponse,
-  LoginRequest,
-  RegisterRequest,
-  RegisterResponse,
-  LoginResponse,
-} from "../interfaces/auth/index.js";
+  IRegisteredUserResponse,
+  ILoginRequest,
+  IRegisterRequest,
+  IRegisterResponse,
+  ILoginResponse,
+} from "../interfaces/index.js";
 
 export async function getRegisteredUser(
   req: Request<{}, any, {}, { email: string }>,
-  res: Response<RegisteredUserResponse>,
+  res: Response<IRegisteredUserResponse>,
   next: NextFunction
 ): Promise<void> {
   try {
@@ -26,7 +26,7 @@ export async function getRegisteredUser(
     }
 
     const user = await findUserByEmail(email);
-    const response: RegisteredUserResponse = {
+    const response: IRegisteredUserResponse = {
       isRegistered: user !== null,
     };
 
@@ -39,15 +39,15 @@ export async function getRegisteredUser(
 }
 
 export async function login(
-  req: Request<{}, any, LoginRequest>,
-  res: Response<LoginResponse>,
+  req: Request<{}, any, ILoginRequest>,
+  res: Response<ILoginResponse>,
   next: NextFunction
 ): Promise<void> {
   try {
     const { email, password } = req.body;
     logger.debug(`login: ${email} ${password}`);
 
-    const response: LoginResponse = {
+    const response: ILoginResponse = {
       token: "1234567890",
       message: "Login successful",
     };
@@ -58,15 +58,15 @@ export async function login(
 }
 
 export async function register(
-  req: Request<{}, any, RegisterRequest>,
-  res: Response<RegisterResponse>,
+  req: Request<{}, any, IRegisterRequest>,
+  res: Response<IRegisterResponse>,
   next: NextFunction
 ): Promise<void> {
   try {
     const { email, password } = req.body;
     logger.debug(`register: ${email} ${password}`);
 
-    const response: RegisterResponse = {
+    const response: IRegisterResponse = {
       token: "1234567890",
       message: "Register successful",
     };

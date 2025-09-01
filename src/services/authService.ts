@@ -1,11 +1,11 @@
 import logger from "../utils/logger.js";
-import { SafeUserDTO } from "../interfaces/auth/user.js";
+import { ISafeUserDTO } from "../interfaces/index.js";
 import { findUserByEmail as findUserByEmailRepo } from "../repositories/userRepo.js";
 
 export async function findUserByEmail(
   email: string
-): Promise<SafeUserDTO | null> {
-  logger.info(`findUserByEmail: ${email}`);
+): Promise<ISafeUserDTO | null> {
+  logger.debug(`authService: findUserByEmail: ${email}`);
 
   if (email.endsWith("test.com")) {
     return {
