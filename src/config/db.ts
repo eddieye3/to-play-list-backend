@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { config } from "./index.js";
+import config from "./index.js";
 import logger from "../utils/logger.js";
 
 const uri = `mongodb+srv://${config.dbUser}:${config.dbPsw}@${config.dbCluster}/${config.dbName}?retryWrites=true&w=majority&appName=to-play-list-backend`;

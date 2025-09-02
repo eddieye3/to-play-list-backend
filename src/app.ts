@@ -2,7 +2,7 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
-import { config } from "./config/index.js";
+import config from "./config/index.js";
 import rateLimit from "express-rate-limit";
 import mainRouter from "./routers/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";

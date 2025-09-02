@@ -7,14 +7,35 @@ const envFile = ".env." + env;
 
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
-export const config = {
+interface IConfig {
+  env: string;
+  port: string;
+  jwtSecret: string;
+  corsOrigin: string;
+  dbUser: string;
+  dbPsw: string;
+  dbCluster: string;
+  dbName: string;
+}
+
+function getRequiredEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+}
+
+const config: IConfig = {
   env: env,
-  port: process.env.PORT || 5000,
-  jwtSecret: process.env.JWT_SECRET || "",
-  corsOrigin: process.env.CORS_ORIGIN || "*",
-  dbUser: process.env.MONGODB_USER,
-  dbPsw: process.env.MONGODB_PSW,
-  dbCluster: process.env.MONGODB_CLUSTER,
-  dbName: process.env.MONGODB_DB,
+  port: getRequiredEnv("PORT"),
+  jwtSecret: getRequiredEnv("JWT_SECRET"),
+  corsOrigin: getRequiredEnv("CORS_ORIGIN"),
+  dbUser: getRequiredEnv("MONGODB_USER"),
+  dbPsw: getRequiredEnv("MONGODB_PSW"),
+  dbCluster: getRequiredEnv("MONGODB_CLUSTER"),
+  dbName: getRequiredEnv("MONGODB_DB"),
   // Add other env variables as needed
 };
+
+export default config;

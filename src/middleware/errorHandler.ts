@@ -1,17 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { config } from "../config/index.js";
-
-export class AppError extends Error {
-  statusCode: number;
-  isOperational: boolean;
-
-  constructor(message: string, statusCode: number, isOperational = true) {
-    super(message);
-    this.statusCode = statusCode;
-    this.isOperational = isOperational;
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
+import config from "../config/index.js";
+import logger from "../utils/logger.js";
 
 export function errorHandler(
   err: any,
@@ -19,7 +8,7 @@ export function errorHandler(
   res: Response,
   _next: NextFunction
 ) {
-  console.error("Error:", err);
+  logger.error(`${err.message}\r\n${err.stack}`);
 
   const status = err.statusCode || 500;
   const message = err.isOperational
@@ -27,8 +16,7 @@ export function errorHandler(
     : "Something went wrong. Please try again later.";
 
   res.status(status).json({
-    success: false,
-    error: message,
+    message: message,
     ...(config.env === "development" && { stack: err.stack }),
   });
 }

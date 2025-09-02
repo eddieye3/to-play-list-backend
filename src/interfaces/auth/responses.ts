@@ -1,13 +1,17 @@
+import { ISafeUserDTO } from "./user.js";
+
 export interface IRegisteredUserResponse {
   isRegistered: boolean;
 }
 
-export interface ILoginResponse {
+export interface IRegisterResponse {
   token: string;
+  user: ISafeUserDTO;
   message?: string;
 }
 
-export interface IRegisterResponse {
+export interface ILoginResponse {
   token: string;
+  user: ISafeUserDTO;
   message?: string;
 }

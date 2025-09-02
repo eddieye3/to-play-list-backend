@@ -1,77 +1,75 @@
 import logger from "../utils/logger.js";
-import { Request, Response, NextFunction } from "express";
-import { AppError } from "../middleware/errorHandler.js";
-import { findUserByEmail } from "../services/authService.js";
+import { Request, Response } from "express";
+import { EMAIL_REGEX } from "../constants/index.js";
+import { InvalidCredentialsError } from "../errors/authErrors.js";
 import {
   IRegisteredUserResponse,
   ILoginRequest,
   IRegisterRequest,
   IRegisterResponse,
   ILoginResponse,
-} from "../interfaces/index.js";
+} from "../interfaces/auth/index.js";
+import * as authService from "../services/authService.js";
 
+// TODO: Add Rate Limit
 export async function getRegisteredUser(
   req: Request<{}, any, {}, { email: string }>,
-  res: Response<IRegisteredUserResponse>,
-  next: NextFunction
+  res: Response<IRegisteredUserResponse>
 ): Promise<void> {
-  try {
-    const email = req.query.email;
-    logger.debug(`getRegisteredUser: ${email}`);
+  const email = req.query.email;
+  logger.debug(`authController: getRegisteredUser: ${email}`);
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!email || !emailRegex.test(email)) {
-      throw new AppError("Invalid email address.", 400);
-    }
-
-    const user = await findUserByEmail(email);
-    const response: IRegisteredUserResponse = {
-      isRegistered: user !== null,
-    };
-
-    logger.debug(`response: ${response.isRegistered}`);
-
-    res.status(200).json(response);
-  } catch (error) {
-    next(error);
+  if (!validateEmail(email)) {
+    throw new InvalidCredentialsError();
   }
-}
-
-export async function login(
-  req: Request<{}, any, ILoginRequest>,
-  res: Response<ILoginResponse>,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const { email, password } = req.body;
-    logger.debug(`login: ${email} ${password}`);
-
-    const response: ILoginResponse = {
-      token: "1234567890",
-      message: "Login successful",
-    };
-    res.status(200).json(response);
-  } catch (error) {
-    next(error);
-  }
+  const user = await authService.findSafeUserByEmail(email);
+  logger.debug(`response: ${user?.email} is registered: ${user !== null}`);
+  res.status(200).json({ isRegistered: user !== null });
 }
 
 export async function register(
   req: Request<{}, any, IRegisterRequest>,
-  res: Response<IRegisterResponse>,
-  next: NextFunction
+  res: Response<IRegisterResponse>
 ): Promise<void> {
-  try {
-    const { email, password } = req.body;
-    logger.debug(`register: ${email} ${password}`);
+  const { email, password } = req.body;
+  logger.debug(`authController: register: ${email}`);
 
-    const response: IRegisterResponse = {
-      token: "1234567890",
-      message: "Register successful",
-    };
-    res.status(200).json(response);
-  } catch (error) {
-    next(error);
+  if (!validateUserInput(email, password)) {
+    throw new InvalidCredentialsError();
   }
+  const { user, token } = await authService.register(email, password);
+  const response = { token, user, message: "Register successful" };
+  res.status(201).json(response);
+}
+
+// TODO: Add Rate Limit
+export async function login(
+  req: Request<{}, any, ILoginRequest>,
+  res: Response<ILoginResponse>
+): Promise<void> {
+  const { email, password } = req.body;
+  logger.debug(`authController: login: ${email}`);
+
+  if (!validateUserInput(email, password)) {
+    throw new InvalidCredentialsError();
+  }
+  const { user, token } = await authService.login(email, password);
+  const response = { token, user, message: "Login successful" };
+  res.status(200).json(response);
+}
+
+// TODO: Use a validator library
+function validateEmail(email: string): boolean {
+  return EMAIL_REGEX.test(email);
+}
+
+function validateUserInput(email: string, password: string): boolean {
+  return (
+    validateEmail(email) &&
+    password.length >= 8 &&
+    /[a-z]/.test(password) &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^a-zA-Z0-9]/.test(password)
+  );
 }
