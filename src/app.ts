@@ -3,10 +3,12 @@ import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
 import config from "./config/index.js";
-import rateLimit from "express-rate-limit";
 import mainRouter from "./routers/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { globalRateLimit } from "./middleware/rateLimiter.js";
+
 const app = express();
+app.locals.isShuttingDown = false;
 
 app.use(helmet());
 
@@ -26,14 +28,7 @@ if (config.env === "development") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use(globalLimiter);
-
+app.use(globalRateLimit);
 app.use("/api", mainRouter);
 
 app.use(errorHandler);

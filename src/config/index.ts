@@ -7,17 +7,6 @@ const envFile = ".env." + env;
 
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
-interface IConfig {
-  env: string;
-  port: string;
-  jwtSecret: string;
-  corsOrigin: string;
-  dbUser: string;
-  dbPsw: string;
-  dbCluster: string;
-  dbName: string;
-}
-
 function getRequiredEnv(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -26,7 +15,7 @@ function getRequiredEnv(name: string): string {
   return value;
 }
 
-const config: IConfig = {
+const config = {
   env: env,
   port: getRequiredEnv("PORT"),
   jwtSecret: getRequiredEnv("JWT_SECRET"),

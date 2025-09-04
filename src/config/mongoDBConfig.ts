@@ -4,7 +4,7 @@ import logger from "../utils/logger.js";
 
 const uri = `mongodb+srv://${config.dbUser}:${config.dbPsw}@${config.dbCluster}/${config.dbName}?retryWrites=true&w=majority&appName=to-play-list-backend`;
 
-export const connectDB = async () => {
+export async function connectDB() {
   try {
     await mongoose.connect(uri);
     logger.info("MongoDB connected");
@@ -12,4 +12,13 @@ export const connectDB = async () => {
     logger.error("MongoDB connection error:", err);
     process.exit(1);
   }
-};
+}
+
+export async function disconnectDB() {
+  try {
+    await mongoose.disconnect();
+    logger.info("MongoDB disconnected");
+  } catch (err) {
+    logger.error("MongoDB disconnection error:", err);
+  }
+}

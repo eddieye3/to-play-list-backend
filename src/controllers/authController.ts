@@ -11,12 +11,11 @@ import {
 } from "../interfaces/auth/index.js";
 import * as authService from "../services/authService.js";
 
-// TODO: Add Rate Limit
 export async function getRegisteredUser(
   req: Request<{}, any, {}, { email: string }>,
   res: Response<IRegisteredUserResponse>
 ): Promise<void> {
-  const email = req.query.email;
+  const email = req.query.email.toLowerCase();
   logger.debug(`authController: getRegisteredUser: ${email}`);
 
   if (!validateEmail(email)) {
@@ -32,28 +31,29 @@ export async function register(
   res: Response<IRegisterResponse>
 ): Promise<void> {
   const { email, password } = req.body;
-  logger.debug(`authController: register: ${email}`);
+  const normalizedEmail = email.toLowerCase();
+  logger.debug(`authController: register: ${normalizedEmail}`);
 
-  if (!validateUserInput(email, password)) {
+  if (!validateUserInput(normalizedEmail, password)) {
     throw new InvalidCredentialsError();
   }
-  const { user, token } = await authService.register(email, password);
+  const { user, token } = await authService.register(normalizedEmail, password);
   const response = { token, user, message: "Register successful" };
   res.status(201).json(response);
 }
 
-// TODO: Add Rate Limit
 export async function login(
   req: Request<{}, any, ILoginRequest>,
   res: Response<ILoginResponse>
 ): Promise<void> {
   const { email, password } = req.body;
-  logger.debug(`authController: login: ${email}`);
+  const normalizedEmail = email.toLowerCase();
+  logger.debug(`authController: login: ${normalizedEmail}`);
 
-  if (!validateUserInput(email, password)) {
+  if (!validateUserInput(normalizedEmail, password)) {
     throw new InvalidCredentialsError();
   }
-  const { user, token } = await authService.login(email, password);
+  const { user, token } = await authService.login(normalizedEmail, password);
   const response = { token, user, message: "Login successful" };
   res.status(200).json(response);
 }
