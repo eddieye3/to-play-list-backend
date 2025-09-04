@@ -1,7 +1,7 @@
 import config from "../config/index.js";
 import logger from "../utils/logger.js";
 import jwt from "jsonwebtoken";
-import { ISafeUserDTO } from "../interfaces/auth/index.js";
+import { SafeUserDTO } from "../interfaces/auth/index.js";
 import { comparePassword, hashPassword } from "../utils/passwordUtil.js";
 import * as userRepo from "../repositories/userRepo.js";
 import * as userMapper from "../utils/mappers/userMapper.js";
@@ -10,7 +10,7 @@ import { MongoErrorUtil } from "../utils/mongoErrorUtil.js";
 
 export async function findSafeUserByEmail(
   email: string
-): Promise<ISafeUserDTO | null> {
+): Promise<SafeUserDTO | null> {
   logger.debug(`authService: findUserByEmail: ${email}`);
 
   const user = await userRepo.findUserByEmail(email);
@@ -20,7 +20,7 @@ export async function findSafeUserByEmail(
 export async function register(
   email: string,
   password: string
-): Promise<{ user: ISafeUserDTO; token: string }> {
+): Promise<{ user: SafeUserDTO; token: string }> {
   logger.debug(`authService: register: ${email}`);
 
   try {
@@ -42,7 +42,7 @@ export async function register(
 export async function login(
   email: string,
   password: string
-): Promise<{ user: ISafeUserDTO; token: string }> {
+): Promise<{ user: SafeUserDTO; token: string }> {
   logger.debug(`authService: login: ${email}`);
 
   try {

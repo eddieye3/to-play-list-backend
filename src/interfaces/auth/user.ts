@@ -3,13 +3,13 @@ export enum Role {
   USER = "USER",
 }
 
-export interface ISafeUserDTO {
+export interface SafeUserDTO {
   id: string;
   email: string;
   role: Role;
 }
 
-export interface IUserDTO {
+export interface UserDTO {
   id: string;
   email: string;
   password: string; // Hashed password

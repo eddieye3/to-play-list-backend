@@ -3,17 +3,17 @@ import { Request, Response } from "express";
 import { EMAIL_REGEX } from "../constants/index.js";
 import { InvalidCredentialsError } from "../errors/authErrors.js";
 import {
-  IRegisteredUserResponse,
-  ILoginRequest,
-  IRegisterRequest,
-  IRegisterResponse,
-  ILoginResponse,
+  RegisteredUserResponse,
+  LoginRequest,
+  RegisterRequest,
+  RegisterResponse,
+  LoginResponse,
 } from "../interfaces/auth/index.js";
 import * as authService from "../services/authService.js";
 
 export async function getRegisteredUser(
   req: Request<{}, any, {}, { email: string }>,
-  res: Response<IRegisteredUserResponse>
+  res: Response<RegisteredUserResponse>
 ): Promise<void> {
   const email = req.query.email.toLowerCase();
   logger.debug(`authController: getRegisteredUser: ${email}`);
@@ -27,8 +27,8 @@ export async function getRegisteredUser(
 }
 
 export async function register(
-  req: Request<{}, any, IRegisterRequest>,
-  res: Response<IRegisterResponse>
+  req: Request<{}, any, RegisterRequest>,
+  res: Response<RegisterResponse>
 ): Promise<void> {
   const { email, password } = req.body;
   const normalizedEmail = email.toLowerCase();
@@ -43,8 +43,8 @@ export async function register(
 }
 
 export async function login(
-  req: Request<{}, any, ILoginRequest>,
-  res: Response<ILoginResponse>
+  req: Request<{}, any, LoginRequest>,
+  res: Response<LoginResponse>
 ): Promise<void> {
   const { email, password } = req.body;
   const normalizedEmail = email.toLowerCase();

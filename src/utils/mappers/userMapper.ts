@@ -1,7 +1,7 @@
 import { UserDocument } from "../../models/user.js";
-import { ISafeUserDTO, IUserDTO } from "../../interfaces/auth/user.js";
+import { SafeUserDTO, UserDTO } from "../../interfaces/auth/user.js";
 
-export function toDTO(user: UserDocument): IUserDTO {
+export function toDTO(user: UserDocument): UserDTO {
   return {
     id: user._id.toString(),
     email: user.email,
@@ -14,7 +14,7 @@ export function toDTO(user: UserDocument): IUserDTO {
   };
 }
 
-export function toSafeDTO(user: UserDocument): ISafeUserDTO {
+export function toSafeDTO(user: UserDocument): SafeUserDTO {
   return {
     id: user._id.toString(),
     email: user.email,
